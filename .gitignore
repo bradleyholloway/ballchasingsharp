@@ -1,0 +1,9 @@
+PlayCEASharp/.vs/*
+PlayCEASharp/PlayCEASharp/bin/*
+PlayCEASharp/PlayCEASharp/obj/*
+PlayCEASharp/PlayCEASharp/objd/*
+PlayCEASharp/CEAClientTest/bin/*
+PlayCEASharp/CEAClientTest/obj/*
+PlayCEASharp/CEAClientTest/objd/*
+.vscode/*
+.DS_Store
