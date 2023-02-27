@@ -10,11 +10,11 @@ namespace PlayCEASharp.Configuration
     /// <summary>
     /// The configuration to scope to which tournaments to analyze.
     /// </summary>
-    public class TournamentConfigurations
+    public class BallchasingConfiguration
     {
         /// <summary>
         /// List of MatchingConfigurations to listen to.
         /// </summary>
-        public List<TournamentConfiguration> configurations { get; set; }
+        public string BallchasingApiKey { get; set; }
     }
 }

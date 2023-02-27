@@ -1,11 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayCEASharp", "PlayCEASharp\PlayCEASharp.csproj", "{3EF3329E-DF96-45B3-943E-A1B2E05AC04F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BallchasingSharp", "PlayCEASharp\BallchasingSharp.csproj", "{3EF3329E-DF96-45B3-943E-A1B2E05AC04F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CEAClientTest", "CEAClientTest\CEAClientTest.csproj", "{ED772E82-4DEF-4EE1-BB67-7632D341C246}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BallchasingSharpClientTest", "CEAClientTest\BallchasingSharpClientTest.csproj", "{ED772E82-4DEF-4EE1-BB67-7632D341C246}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -11,306 +11,41 @@ using System.Threading.Tasks;
 namespace PlayCEASharp.RequestManagement
 {
     /// <summary>
-    /// Class for marshalling responses from PlayCEA into PlayCEASharp objects.
+    /// Class for marshalling responses from ballchasing.com into C# objects.
     /// </summary>
     internal static class Marshaller
     {
-        /// <summary>
-        /// Transforms a json tournament into a Tournament.
-        /// </summary>
-        /// <param name="tournamentToken">the json for the tournament.</param>
-        /// <returns>A hydrated Tournament</returns>
-        internal static Tournament Tournament(JToken tournamentToken, TournamentConfiguration tc) {
-            Tournament tournament = ResourceCache.GetTournament((string)tournamentToken["tmid"]);
-            tournament.TournamentName = (string)tournamentToken["name"];
-
-            if (tournamentToken["current"] != null)
-            {
-                tournament.Current = (bool)tournamentToken["current"];
-            }
-
-            if (tournamentToken["live"] != null)
-            {
-                tournament.Live = (bool)tournamentToken["live"];
-            }
-
-            if (tournamentToken["msg"] != null)
-            {
-                tournament.Message = (string)tournamentToken["msg"];
-            }
-
-            if (tournamentToken["meta"] != null)
-            {
-                tournament.Metadata = tournamentToken["meta"];
-            }
-            tournament.GameId = (string)tournamentToken["game"]["id"];
-            tournament.GameName = (string)tournamentToken["game"]["name"];
-            tournament.SeasonLeague = (string)tournamentToken["sn"]["l"];
-            tournament.SeasonSeason = (string)tournamentToken["sn"]["s"];
-            tournament.SeasonYear = (string)tournamentToken["sn"]["y"];
-
-            string regularSeasonBracketId = (string)tournamentToken["sbkt"]["reg"];
-            if (!string.IsNullOrEmpty(regularSeasonBracketId))
-            {
-                Bracket reg = ResourceCache.GetBracket(regularSeasonBracketId);
-                tournament.RegularSeason = reg;
-                reg.Tournament = tournament;
-                if (!tournament.Brackets.Contains(reg))
-                {
-                    tournament.Brackets.Add(reg);
-                }
-            }
-
-            string playoffBracketId = (string)tournamentToken["sbkt"]["po"];
-            if (!string.IsNullOrEmpty(playoffBracketId))
-            {
-                Bracket playoffs = ResourceCache.GetBracket(playoffBracketId);
-                playoffs.Tournament = tournament;
-                tournament.Playoffs = playoffs;
-                if (!tournament.Brackets.Contains(playoffs))
-                {
-                    tournament.Brackets.Add(playoffs);
-                }
-            }
-
-            foreach (JToken bracketToken in tournamentToken["bs"])
-            {
-                Bracket b = ResourceCache.GetBracket((string)bracketToken["bid"]);
-                b.Name = (string)bracketToken["name"];
-            }
-
-            foreach (JToken teamToken in tournamentToken["ts"])
-            {
-                Team team = ResourceCache.GetTeam((string)teamToken["tid"]);
-                if (!tournament.Teams.Contains(team))
-                {
-                    tournament.Teams.Add(team);
-                }
-            }
-
-            return tournament;
+        internal static Replay Replay(JToken replayToken)
+        {
+            Replay replay = new Replay((string)replayToken["id"]);
+            replay.BlueTeam = Team(replayToken["blue"]);
+            replay.OrangeTeam = Team(replayToken["orange"]);
+            replay.BlueGoals = int.Parse((string)replayToken["blue"]["stats"]["core"]["goals"]);
+            replay.OrangeGoals = int.Parse((string)replayToken["orange"]["stats"]["core"]["goals"]);
+            return replay;
         }
 
-        /// <summary>
-        /// Transforms the json bracket into a Bracket.
-        /// </summary>
-        /// <param name="bracketToken">The json returned from PlayCEA.</param>
-        /// <returns>A hydrated Bracket.</returns>
-        internal static Bracket Bracket(JToken bracketToken, TournamentConfiguration tc)
+        internal static Team Team(JToken teamToken)
         {
-            Bracket bracket1 = ResourceCache.GetBracket((string)bracketToken["bid"]);
-            bracket1.Name = (string)bracketToken["name"];
-            bracket1.Game = (string)bracketToken["game"];
-            Bracket bracket = bracket1;
-            foreach (JToken token in bracketToken["rounds"])
+            Team team = new Team();
+            team.Name = (string)teamToken["name"];
+            foreach (JToken playerToken in teamToken["players"])
             {
-                BracketRound round = BracketRound(token, bracket);
-                if (!bracket.Rounds.Contains(round))
-                {
-                    bracket.Rounds.Add(round);
-                }
-            }
-            foreach (JToken token2 in bracketToken["ts"])
-            {
-                Team team = Team(token2, tc);
-                if (!bracket.Teams.Contains(team))
-                {
-                    bracket.Teams.Add(team);
-                }
-            }
-
-            if (bracketToken["meta"] != null)
-            {
-                string firstRoundId = bracket.Rounds.First().RoundId;
-                if (bracketToken["meta"][firstRoundId] != null && bracketToken["meta"][firstRoundId]["buckets"] != null)
-                {
-                    JToken topBucket = bracketToken["meta"][firstRoundId]["buckets"]["top"];
-                    bracket.TopMetaTeams = ExtractTeamsFromBucket(topBucket);
-                    JToken midBucket = bracketToken["meta"][firstRoundId]["buckets"]["mid"];
-                    bracket.MidMetaTeams = ExtractTeamsFromBucket(midBucket);
-                    JToken botBucket = bracketToken["meta"][firstRoundId]["buckets"]["bot"];
-                    bracket.BotMetaTeams = ExtractTeamsFromBucket(botBucket);
-                }
-            }
-
-            return bracket;
-        }
-
-        /// <summary>
-        /// Gets a list of teams from a bucket in metadata.
-        /// </summary>
-        /// <param name="bucketToken">The meatdata bucket token.</param>
-        /// <returns>List of teams.</returns>
-        private static List<Team> ExtractTeamsFromBucket(JToken bucketToken)
-        {
-            List<Team> teams = new List<Team>();
-
-            foreach (JToken teamToken in bucketToken)
-            {
-                Team t = ResourceCache.GetTeam((string)teamToken["tid"]);
-                teams.Add(t);
-            }
-
-            return teams;
-        }
-
-        /// <summary>
-        /// Transforms a json bracket round into a BracketRound.
-        /// </summary>
-        /// <param name="roundToken">the json of a bracketround from PlayCEA.</param>
-        /// <param name="bracket">the bracket parent of this round.</param>
-        /// <returns>A hydrated BracketRound.</returns>
-        internal static BracketRound BracketRound(JToken roundToken, Bracket bracket)
-        {
-            BracketRound bracketRound = ResourceCache.GetBracketRound((string)roundToken["rid"]);
-            bracketRound.RoundName = (string)roundToken["roundName"];
-            bracketRound.Complete = (bool)roundToken["complete"];
-            bracketRound.GameCount = (int)roundToken["gameCount"];
-            bracketRound.Matches.Clear();
-            foreach (JToken token in roundToken["matches"])
-            {
-                MatchResult item = Match(token, bracketRound);
-                bracketRound.Matches.Add(item);
-            }
-
-            bracketRound.Bracket = bracket;
-            return bracketRound;
-        }
-
-        /// <summary>
-        /// Transforms the json game token into a Game.
-        /// </summary>
-        /// <param name="gameToken">json representation of a game.</param>
-        /// <returns>A hydrated Game.</returns>
-        internal static Game Game(JToken gameToken)
-        {
-            Game game1 = new Game((string)gameToken["gid"]);
-            JToken tid = gameToken["ts"][(int)0]["tid"];
-            game1.HomeTeam = ResourceCache.GetTeam(ExtractTid(tid));
-            game1.HomeScore = (int)gameToken["ts"][(int)0]["rs"];
-            tid = gameToken["ts"][(int)1]["tid"];
-            game1.AwayTeam = ResourceCache.GetTeam(ExtractTid(tid));
-            game1.AwayScore = (int)gameToken["ts"][(int)1]["rs"];
-            return game1;
-        }
-
-        /// <summary>
-        /// Transforms the json representation of a match into a MatchResult.
-        /// </summary>
-        /// <param name="matchToken">the json representation from PlayCEA.</param>
-        /// <param name="optionalBracketRound">The BracketRound to provide a backlink for round rankings.</param>
-        /// <returns>A MatchResult for the given match.</returns>
-        internal static MatchResult Match(JToken matchToken, BracketRound optionalBracketRound = null)
-        {
-            MatchResult result2;
-            if (object.ReferenceEquals(matchToken["ts"].First, matchToken["ts"].Last))
-            {
-                MatchResult result1 = new MatchResult((string)matchToken["mid"]);
-                result1.Round = (int)matchToken["rnd"];
-                result1.HomeTeam = ResourceCache.GetTeam((string)matchToken["ts"][(int)0]["tid"]);
-                result1.AwayTeam = null;
-                result1.Bye = true;
-                result1.BracketRound = optionalBracketRound;
-                result2 = result1;
-            }
-            else
-            {
-                MatchResult result3 = new MatchResult((string)matchToken["mid"]);
-                result3.Round = (int)matchToken["rnd"];
-                result3.HomeTeam = ResourceCache.GetTeam((string)matchToken["ts"][(int)0]["tid"]);
-                result3.AwayTeam = ResourceCache.GetTeam((string)matchToken["ts"][(int)1]["tid"]);
-                MatchResult result = result3;
-                if ((optionalBracketRound != null) && (matchToken["ts"][(int)0]["rank"] != null))
-                {
-                    result.HomeTeam.FixedRoundRanking[optionalBracketRound] = (int)matchToken["ts"][(int)0]["rank"];
-                    result.AwayTeam.FixedRoundRanking[optionalBracketRound] = (int)matchToken["ts"][(int)1]["rank"];
-                }
-                JToken token = matchToken["gs"];
-                result.Games = new List<Game>();
-                foreach (JToken token2 in token)
-                {
-                    Game item = Game(token2);
-                    if (item.HomeScore > item.AwayScore)
-                    {
-                        result.HomeGamesWon++;
-                    }
-                    else if (item.AwayScore > item.HomeScore)
-                    {
-                        result.AwayGamesWon++;
-                    }
-                    result.HomeGoals += item.HomeScore;
-                    result.AwayGoals += item.AwayScore;
-                    result.Games.Add(item);
-                }
-                result.BracketRound = optionalBracketRound;
-                result2 = result;
-            }
-
-            return result2;
-        }
-
-        /// <summary>
-        /// Transforms the json of a player into a Player.
-        /// </summary>
-        /// <param name="playerToken">the json representation of the player.</param>
-        /// <returns>A hydrated Player.</returns>
-        internal static Player Player(JToken playerToken)
-        {
-            Player player1 = ResourceCache.GetPlayer((string)playerToken["uid"]);
-            player1.DisplayName = (string)playerToken["dn"];
-            player1.DiscordId = (string)playerToken["ddn"];
-            player1.DiscordUID = ulong.Parse((string)playerToken["uid"]);
-            player1.PictureURL = (string)playerToken["ico"];
-            player1.Captain = (bool)playerToken["captain"];
-            return player1;
-        }
-
-        /// <summary>
-        /// Transforms the json representation of a team into a Team.
-        /// </summary>
-        /// <param name="teamToken">the json representation of the team.</param>
-        /// <returns>A hydrated Team.</returns>
-        internal static Team Team(JToken teamToken, TournamentConfiguration tc)
-        {
-            Team team = ResourceCache.GetTeam((string)teamToken["tid"]);
-            team.NameConfiguration = tc.namingConfig;
-            team.Name = (string)teamToken["dn"];
-            team.Org = (string)teamToken["org"];
-            team.ImageURL = (string)teamToken["ico"];
-            if (teamToken["r"] != null)
-            {
-                team.Rank = (int)teamToken["r"];
-            }
-            if (teamToken["mbr"] != null)
-            {
-                foreach (JToken token in teamToken["mbr"])
-                {
-                    Player player = Player(token);
-                    if (!team.Players.Contains(player))
-                    {
-                        team.Players.Add(player);
-                    }
-                }
-            }
-
-            if (teamToken["meta"] != null && teamToken["meta"]["charity"] != null)
-            {
-                team.Charity = (string)teamToken["meta"]["charity"];
+                team.Players.Add(Player(playerToken));
             }
 
             return team;
         }
 
-        private static string ExtractTid(JToken tidToken)
+        internal static Player Player(JToken playerToken)
         {
-            try
-            {
-                return (string)tidToken;
-            }
-            catch (ArgumentException)
-            {
-                return (string)tidToken["tid"];
-            }
+            Player player = new Player();
+            player.Name = (string)playerToken["name"];
+            player.Platform = (string)playerToken["id"]["platform"];
+            player.PlatformId = (string)playerToken["id"]["id"];
+            return player;
         }
+
+
     }
 }

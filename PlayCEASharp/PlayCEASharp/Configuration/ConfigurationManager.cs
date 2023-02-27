@@ -23,10 +23,10 @@ namespace PlayCEASharp.Configuration
             lock (fileLock)
             {
                 string configString = File.ReadAllText(configurationPath);
-                TournamentConfigurations = JsonSerializer.Deserialize<TournamentConfigurations>(configString);
+                BallchasingConfiguration = JsonSerializer.Deserialize<BallchasingConfiguration>(configString);
             }
         }
 
-        internal static TournamentConfigurations TournamentConfigurations { get; private set; }
+        internal static BallchasingConfiguration BallchasingConfiguration { get; private set; }
     }
 }

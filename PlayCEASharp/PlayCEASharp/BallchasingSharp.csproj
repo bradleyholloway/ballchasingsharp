@@ -4,17 +4,16 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <LangVersion>10</LangVersion>
     <ImplicitUsings>enable</ImplicitUsings>
-    <AssemblyName>PlayCEASharp</AssemblyName>
-    <PackageId>PlayCEASharp</PackageId>
+    <AssemblyName>BallchasingSharp</AssemblyName>
+    <PackageId>BallchasingSharp</PackageId>
     <Version>2.1.15</Version>
     <Authors>Bradley Holloway</Authors>
     <Company>None</Company>
     <Description>
-        This client library fetches and analyzes data from PlayCEA.com.
-        Configurations support scoping to a specific game and season.
+        This client library fetches data from ballchasing.com
     </Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/bradleyholloway/cea_stats</RepositoryUrl>
+    <RepositoryUrl>https://github.com/bradleyholloway/ballchasingsharp</RepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
   </PropertyGroup>
@@ -30,7 +29,10 @@
   <ItemGroup>
     <None Remove="Logging\" />
   </ItemGroup>
+
   <ItemGroup>
-      <None Include="images\icon.png" Pack="true" PackagePath="\" />
+    <None Update="images\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

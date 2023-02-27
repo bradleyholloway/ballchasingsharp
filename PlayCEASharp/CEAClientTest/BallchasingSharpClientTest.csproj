@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <StartupObject>RlClientTest.Program</StartupObject>
-    <AssemblyName>RlClientTest</AssemblyName>
+    <StartupObject>BallchasingSharpClientTest.Program</StartupObject>
+    <AssemblyName>BallchasingSharpClientTest</AssemblyName>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -16,6 +16,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\PlayCEASharp\PlayCEASharp.csproj" />
+	  <ProjectReference Include="..\PlayCEASharp\BallchasingSharp.csproj" />
 	</ItemGroup>
 </Project>
