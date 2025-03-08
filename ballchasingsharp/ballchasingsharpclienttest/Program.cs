@@ -1,10 +1,15 @@
-﻿using BallchasingSharp;
+﻿
+using BallchasingSharp;
 
-namespace BallchasingSharpClientTest;public class Program {    public static void Main()    {
+namespace BallchasingSharpClientTest;
+
+public class Program {
+    public static void Main()
+    {
         BallchasingConfiguration configuration = ConfigurationManager.BallchasingConfiguration;
         RequestManager rm = new RequestManager(configuration.BallchasingApiKey);
 
-        var group = rm.GetReplaysInGroup("09-28-hottest-wheelies-vs-adobe--s2xf4u4liy").Result;
+        //var group = rm.GetReplaysInGroup("09-28-hottest-wheelies-vs-adobe--s2xf4u4liy").Result;
 
 
         //Replay replay = rm.GetReplay("be5243ce-ba23-4703-bd8d-ba8f2ad8ca76").Result;
@@ -21,13 +26,16 @@ namespace BallchasingSharpClientTest;public class Program {    public static 
         // Replay replay3 = rm.GetReplay("fb24e575-b8e5-4436-bb31-dfe08944cee6").Result;
 
         //string steamUserId = "76561198340871012";
-        //List<Replay> replays = rm.ListReplays(string.Empty, $"steam:{steamUserId}", "private", replayDateAfter:new DateTime(2023, 10, 1), count: 30).Result;
+        List<Replay> replays = rm.ListReplays(string.Empty, $"steam:{76561198347646608}", "private", count: 30).Result;
         //List<Replay> populatedReplays = DedoupMatches(replays, rm);
         //List<Replay> BestOf5 = GetFirstToSeries(populatedReplays, 3);
         //string groupId = CreateReplayGroupForReplays("Test Best of 5 Group", BestOf5, rm, "cea-spring-2024-yr90oqm7gm");
 
         Console.WriteLine();
-    }    public static string CreateReplayGroupForReplays(string groupName, List<Replay> replays, RequestManager rm, string parentGroup=null)
+    }
+
+
+    public static string CreateReplayGroupForReplays(string groupName, List<Replay> replays, RequestManager rm, string parentGroup=null)
     {
         string groupId = rm.CreateReplayGroup(groupName, parentGroup).Result;
 
@@ -37,7 +45,9 @@ namespace BallchasingSharpClientTest;public class Program {    public static 
         }
 
         return groupId;
-    }    public static List<Replay> DedoupMatches(List<Replay> replays, RequestManager rm)
+    }
+
+    public static List<Replay> DedoupMatches(List<Replay> replays, RequestManager rm)
     {
         HashSet<string> matchGuids = new HashSet<string>();
         return replays.Select(r => rm.GetReplay(r.ReplayId).Result).Where(r =>
@@ -49,7 +59,9 @@ namespace BallchasingSharpClientTest;public class Program {    public static 
             matchGuids.Add(r.MatchGuid);
             return true;
         }).ToList();
-    }    public static List<Replay> GetFirstToSeries(List<Replay> replays, int firstTo)
+    }
+
+    public static List<Replay> GetFirstToSeries(List<Replay> replays, int firstTo)
     {
         List<Replay> orderedReplays = replays.OrderByDescending(r => r.Date).ToList();
         List<Replay> results = new List<Replay>();
@@ -75,4 +87,6 @@ namespace BallchasingSharpClientTest;public class Program {    public static 
 
         results.Reverse();
         return results;
-    }}
+    }
+}
+

@@ -18,7 +18,7 @@ namespace BallchasingSharp
             replay.Date = (DateTime)replayToken["date"];
             replay.TeamSize = (int?)replayToken["team_size"];
             replay.MatchType = (string?)replayToken["match_type"];
-            replay.Duration = (int)replayToken["duration"];
+            replay.Duration = (int)(replayToken["duration"] ?? 0);
             replay.Overtime = (bool)replayToken["overtime"];
             replay.OvertimeSeconds = (int?)replayToken["overtime_seconds"];
             replay.Link = (string)replayToken["link"];
