@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <AssemblyName>BallchasingSharp</AssemblyName>
     <PackageId>BallchasingSharp</PackageId>
-    <Version>2.1.15</Version>
+    <Version>1.2.3</Version>
     <Authors>Bradley Holloway</Authors>
     <Company>None</Company>
     <Description>
@@ -16,14 +16,15 @@
     <RepositoryUrl>https://github.com/bradleyholloway/ballchasingsharp</RepositoryUrl>
     <PackageIcon>icon.png</PackageIcon>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+    <UserSecretsId>36ff584d-f4cd-44ce-8170-b4d2165b30eb</UserSecretsId>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile>bin\Debug\netstandard2.1\PlayCEASharp.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.1\BallchasingSharp.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Text.Json" Version="6.0.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,8 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="images\icon.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <None Include="images\icon.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 </Project>

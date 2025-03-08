@@ -16,6 +16,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\PlayCEASharp\BallchasingSharp.csproj" />
+	  <ProjectReference Include="..\ballchasingsharp\BallchasingSharp.csproj" />
 	</ItemGroup>
 </Project>

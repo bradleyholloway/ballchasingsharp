@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BallchasingSharp", "PlayCEASharp\BallchasingSharp.csproj", "{3EF3329E-DF96-45B3-943E-A1B2E05AC04F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BallchasingSharp", "ballchasingsharp\BallchasingSharp.csproj", "{3EF3329E-DF96-45B3-943E-A1B2E05AC04F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BallchasingSharpClientTest", "CEAClientTest\BallchasingSharpClientTest.csproj", "{ED772E82-4DEF-4EE1-BB67-7632D341C246}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BallchasingSharpClientTest", "ballchasingsharpclienttest\BallchasingSharpClientTest.csproj", "{ED772E82-4DEF-4EE1-BB67-7632D341C246}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,6 +28,6 @@ Global
 		SolutionGuid = {29DA1598-1126-41F3-AECA-E9E10B9F0BFD}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		description = Initial release for PlayCEASharp. A Client library for C# for reading and analyzing data from PlayCea.com
+		description = A client library for ballchasing.com
 	EndGlobalSection
 EndGlobal

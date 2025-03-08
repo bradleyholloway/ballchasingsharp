@@ -1,9 +1,10 @@
-PlayCEASharp/.vs/*
-PlayCEASharp/PlayCEASharp/bin/*
-PlayCEASharp/PlayCEASharp/obj/*
-PlayCEASharp/PlayCEASharp/objd/*
-PlayCEASharp/CEAClientTest/bin/*
-PlayCEASharp/CEAClientTest/obj/*
-PlayCEASharp/CEAClientTest/objd/*
+ballchasingsharp/.vs/*
+ballchasingsharp/ballchasingsharp/bin/*
+ballchasingsharp/ballchasingsharp/obj/*
+ballchasingsharp/ballchasingsharp/objd/*
+ballchasingsharp/ballchasingsharpclienttest/bin/*
+ballchasingsharp/ballchasingsharpclienttest/obj/*
+ballchasingsharp/ballchasingsharpclienttest/objd/*
+/ballchasingsharp/ballchasingsharpclienttest/Resources/configuration.json
 .vscode/*
 .DS_Store
